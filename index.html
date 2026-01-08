@@ -7,8 +7,8 @@
 </head>
 <body>
     <script>
-        let humanScore,
-        computerScore = 0;
+        let humanScore = 0;
+        let computerScore = 0;
         function getComputerChoice()
         {
             let computerChoice = Math.floor(Math.random()*3)
@@ -50,17 +50,29 @@
                     || (humanChoice == "paper" && computerChoice == "rock")
                     || (humanChoice == "scissors" && computerChoice == "paper"))
             {
-                return `You win, ${humanChoice} beats ${computerChoice}!`;
                 humanScore++;
+                return `You win, ${humanChoice} beats ${computerChoice}!`;
             }
             else if ((computerChoice == "rock" && humanChoice == "scissors")
                     || (computerChoice == "paper" && humanChoice == "rock")
                     || (computerChoice == "scissors" && humanChoice == "paper"))
             {
+                computerScore++;
                 return `You lose, ${computerChoice} beats ${humanChoice}!`;
-                computerChoice++;
             }
         }
+
+        function playGame()
+        {
+            for (let i = 0; i < 5; i++)
+            {
+                console.log(playRound(getHumanChoice(),getComputerChoice()))
+            }
+            console.log(`== Final Score ==\n`
+            +`\nPlayer: ${humanScore} and CPU: ${computerScore}!`)
+        }
+        
+        playGame();
 
     </script>
 </body>
