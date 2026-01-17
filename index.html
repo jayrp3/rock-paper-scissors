@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock-Paper-Scissors</title>
 </head>
 <body>
     <script>
@@ -11,34 +11,10 @@
         let computerScore = 0;
         function getComputerChoice()
         {
-            let computerChoice = Math.floor(Math.random()*3)
-            if (computerChoice === 0)
-            {
-                computerChoice = "rock"
-            }
-            else if (computerChoice === 1)
-            {
-                computerChoice = "paper"
-            }
-            else if (computerChoice === 2)
-            {
-                computerChoice = "scissors"
-                
-            }
-            else
-            {
-                console.log("error occurred during CPU's turn!")
-            }
-            return computerChoice
+            const choices = ["rock", "paper", "scissors"];
+            return choices[Math.floor(Math.random() * 3)];
         }
 
-        function getHumanChoice()
-        {
-            let humanChoice = prompt("Rock, Paper, Scissors, SHOOT!"
-            +"\nPlease type: rock, paper, or scissors!");
-            humanChoice = humanChoice.toLowerCase();
-            return humanChoice;
-        }
 
         function playRound(humanChoice, computerChoice)
         {
@@ -62,15 +38,67 @@
             }
         }
 
-        function playGame()
+        function updateScores(scores)
         {
-            for (let i = 0; i < 5; i++)
-            {
-                console.log(playRound(getHumanChoice(),getComputerChoice()))
-            }
-            console.log(`== Final Score ==\n`
-            +`\nPlayer: ${humanScore} and CPU: ${computerScore}!`)
+            scores.textContent=`Player Score: ${humanScore} CPU Score: ${computerScore}`;
         }
+
+        function playGame() 
+        {
+            const title = document.createElement("header");
+            title.textContent = "Rock - Paper - Scissors";
+            title.style.cssText = "font-size: 32px; font-weight:bold;";
+
+            const scores = document.createElement("header");
+            updateScores(scores);
+
+            const gameLog = document.createElement("div");
+            gameLog.style.whiteSpace = "pre-line";
+
+            const rockBtn = document.createElement("button");
+            rockBtn.textContent = "Rock";
+
+            const paperBtn = document.createElement("button");
+            paperBtn.textContent = "Paper";
+
+            const scissorsBtn = document.createElement("button");
+            scissorsBtn.textContent = "Scissors";
+
+            function handlePlay(playerChoice) {
+                gameLog.textContent = "";
+                gameLog.textContent += `${playerChoice} clicked!\n`;
+                gameLog.textContent += playRound(playerChoice.toLowerCase(), getComputerChoice());
+                updateScores(scores);
+
+                if (humanScore === 5 || computerScore === 5) {
+                    gameLog.textContent += "\nGame over!";
+                    rockBtn.remove();
+                    paperBtn.remove();
+                    scissorsBtn.remove();
+                    const resetBtn = document.createElement("button");
+                    resetBtn.textContent = "New Game";
+                    document.body.append(resetBtn);
+                    resetBtn.addEventListener("click", () => 
+                    {   resetBtn.remove();
+
+                        humanScore = 0;
+                        computerScore = 0;
+                        gameLog.textContent="";
+                        updateScores(scores);
+                        document.body.append(rockBtn,paperBtn,scissorsBtn);
+
+                    });
+                }
+            }
+
+            rockBtn.addEventListener("click", () => handlePlay("Rock"));
+            paperBtn.addEventListener("click", () => handlePlay("Paper"));
+            scissorsBtn.addEventListener("click", () => handlePlay("Scissors"));
+
+            document.body.style.textAlign = "center";
+            document.body.append(title, scores, rockBtn, paperBtn, scissorsBtn, gameLog);
+        }
+
         
         playGame();
 
